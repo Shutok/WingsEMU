@@ -198,9 +198,8 @@ public:
 
         return true;
     }
-        if (creature->isQuestGiver())
-         
-  bool OnGossipHello(Player* player, Creature* creature)
+
+    bool OnGossipHello(Player* player, Creature* creature)
     {
         if (creature->isQuestGiver())
             player->PrepareQuestMenu(creature->GetGUID());
