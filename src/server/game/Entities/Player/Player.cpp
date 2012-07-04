@@ -1702,8 +1702,12 @@ if (m_jail_amnestie == true && sObjectMgr->m_jailconf_amnestie > 0)
 
     GetAchievementMgr().UpdateTimedAchievements(p_time);
     
-    //Remove Mount When Used Dispersion (ShadowForm + Dispersion Mount Exploit)
-    if (HasAura(47585) && HasAuraType(SPELL_AURA_MOUNTED))
+    // Fix Sum Of Enrage and trigger_spell Wrecking Crew (Enrage too)  
+    if (HasAura(14204) && HasAura(57522))  
+        ToPlayer()->RemoveAura(57522);  
+
+    //Remove Mount When Used Dispersion (ShadowForm + Dispersion Mount Exploit)  
+    if (HasAura(47585) && HasAuraType(SPELL_AURA_MOUNTED))  
         ToPlayer()->RemoveAurasByType(SPELL_AURA_MOUNTED);
 
     if (HasUnitState(UNIT_STATE_MELEE_ATTACKING) && !HasUnitState(UNIT_STATE_CASTING))
@@ -14597,14 +14601,14 @@ void Player::OnGossipSelect(WorldObject* source, uint32 gossipListId, uint32 men
     {
         case GOSSIP_OPTION_GOSSIP:
         {
+            if (menuItemData->GossipActionPoi)
+                PlayerTalkClass->SendPointOfInterest(menuItemData->GossipActionPoi);
+
             if (menuItemData->GossipActionMenuId)
             {
                 PrepareGossipMenu(source, menuItemData->GossipActionMenuId);
                 SendPreparedGossip(source);
             }
-
-            if (menuItemData->GossipActionPoi)
-                PlayerTalkClass->SendPointOfInterest(menuItemData->GossipActionPoi);
 
             break;
         }
