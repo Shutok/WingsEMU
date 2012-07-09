@@ -4657,7 +4657,8 @@ void Unit::AddGameObject(GameObject* gameObj)
 
 void Unit::RemoveGameObject(GameObject* gameObj, bool del)
 {
-    if (!gameObj || !gameObj->GetOwnerGUID() == GetGUID()) return;
+    if (!gameObj || gameObj->GetOwnerGUID() != GetGUID())
+        return;
 
     gameObj->SetOwnerGUID(0);
 
@@ -5542,6 +5543,13 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                         if (!ToPlayer()->HasSpellCooldown(*itr))
                             ToPlayer()->AddSpellCooldown(*itr, 0, time(NULL) + cooldown);
                     }
+                    break;
+                }
+                case 71875: // Item - Black Bruise: Necrotic Touch Proc
+                case 71877:
+                {
+                    basepoints0 = CalculatePctN(int32(damage), triggerAmount);
+                    triggered_spell_id = 71879;
                     break;
                 }
                 // Item - Shadowmourne Legendary
@@ -15491,6 +15499,7 @@ void Unit::Kill(Unit* victim, bool durabilityLoss)
 
                 // FORM_SPIRITOFREDEMPTION and related auras
                 victim->CastSpell(victim, 27827, true, NULL, aurEff);
+                victim->CastSpell(victim, 19753, true);
                 spiritOfRedemption = true;
                 break;
             }
